@@ -1,6 +1,6 @@
 services:
   # PostgreSQL Database
-  - type: pg
+  - type: postgres
     name: insider-threat-db
     databaseName: insider_threat_db
     user: threat_admin
