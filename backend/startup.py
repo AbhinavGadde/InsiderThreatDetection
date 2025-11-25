@@ -16,7 +16,24 @@ def wait_for_db(max_retries=30, delay=2):
     
     database_url = os.getenv('DATABASE_URL')
     if not database_url:
-        print("ERROR: DATABASE_URL environment variable not set")
+        print("=" * 60)
+        print("❌ ERROR: DATABASE_URL environment variable not set")
+        print("=" * 60)
+        print("Please set the DATABASE_URL environment variable in Render dashboard:")
+        print("1. Go to your backend service settings")
+        print("2. Navigate to 'Environment' tab")
+        print("3. Add DATABASE_URL with your PostgreSQL internal database URL")
+        print("   (Should look like: postgresql://user:pass@host:port/dbname)")
+        sys.exit(1)
+    
+    # Validate that DATABASE_URL looks like a database URL
+    if not database_url.startswith(('postgresql://', 'postgres://')):
+        print("=" * 60)
+        print("❌ ERROR: Invalid DATABASE_URL format")
+        print("=" * 60)
+        print(f"Current DATABASE_URL value: {database_url[:20]}...")
+        print("DATABASE_URL should start with 'postgresql://' or 'postgres://'")
+        print("Please set the correct Internal Database URL from your Render database service.")
         sys.exit(1)
     
     # Parse database URL
