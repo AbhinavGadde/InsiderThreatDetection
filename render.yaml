@@ -1,11 +1,10 @@
 services:
   # PostgreSQL Database
-  - type: pspg
+  - type: pg
     name: insider-threat-db
     databaseName: insider_threat_db
     user: threat_admin
     plan: starter
-    maxConnections: 25
 
   # Backend API Service
   - type: web
