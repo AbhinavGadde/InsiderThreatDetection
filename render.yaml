@@ -29,7 +29,5 @@ services:
     envVars:
       - key: REACT_APP_API_URL
         sync: false
-    buildCommand: ""
-    startCommand: ""
     healthCheckPath: /health
 
