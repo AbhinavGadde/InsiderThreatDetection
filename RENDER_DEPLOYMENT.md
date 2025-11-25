@@ -14,22 +14,39 @@ This guide will help you deploy the Insider Threat Detection application on Rend
 
 Render Blueprints allow you to deploy all services at once using the `render.yaml` file.
 
-1. **Connect your repository to Render:**
+**IMPORTANT:** Create the PostgreSQL database FIRST before deploying the Blueprint.
+
+1. **Create PostgreSQL Database First:**
+   - Go to [Render Dashboard](https://dashboard.render.com)
+   - Click "New +" → "PostgreSQL"
+   - Configure:
+     - **Name:** `insider-threat-db`
+     - **Database:** `insider_threat_db`
+     - **User:** `threat_admin`
+     - **Plan:** Starter (Free)
+   - Click "Create Database"
+   - **IMPORTANT:** Copy the **Internal Database URL** (you'll need this)
+   - Wait 2-3 minutes for database to initialize
+
+2. **Connect your repository to Render:**
    - Go to [Render Dashboard](https://dashboard.render.com)
    - Click "New +" → "Blueprint"
    - Connect your Git repository
    - Render will automatically detect `render.yaml`
 
-2. **Deploy the Blueprint:**
-   - Render will parse `render.yaml` and create all services
+3. **Deploy the Blueprint:**
+   - Render will parse `render.yaml` and create web services (backend & frontend)
    - Review the services and click "Apply"
+   - Wait for services to be created
 
-3. **Configure Environment Variables:**
+4. **Configure Environment Variables:**
    After deployment, you'll need to manually set these:
 
    **Backend Service (`insider-threat-backend`):**
+   - `DATABASE_URL`: Paste the **Internal Database URL** you copied in step 1
    - `CORS_ORIGINS`: Set to your frontend URL (e.g., `https://insider-threat-frontend.onrender.com`)
-   - Optional: `SECRET_KEY` will be auto-generated
+   - `SECRET_KEY`: Will be auto-generated
+   - Save changes (this will trigger a redeploy)
 
    **Frontend Service (`insider-threat-frontend`):**
    - `REACT_APP_API_URL`: Set to your backend URL (e.g., `https://insider-threat-backend.onrender.com`)
@@ -40,12 +57,12 @@ Render Blueprints allow you to deploy all services at once using the `render.yam
    - Click "Manual Deploy" → "Deploy latest commit"
    - The new API URL will be baked into the build
 
-4. **Wait for deployment:**
-   - Database will be created automatically
-   - Backend will initialize tables and populate demo data
+5. **Wait for deployment:**
+   - Backend will connect to database and initialize tables
+   - Demo data (50 users) will be populated automatically
    - Frontend will build and deploy
 
-5. **Access your application:**
+6. **Access your application:**
    - Frontend: `https://insider-threat-frontend.onrender.com`
    - Backend API: `https://insider-threat-backend.onrender.com`
    - API Docs: `https://insider-threat-backend.onrender.com/docs`
