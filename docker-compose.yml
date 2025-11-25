@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: threat_detection_db
+    environment:
+      POSTGRES_DB: insider_threat_db
+      POSTGRES_USER: threat_admin
+      POSTGRES_PASSWORD: secure_password_123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - threat_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U threat_admin -d insider_threat_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: threat_detection_api
+    environment:
+      DATABASE_URL: postgresql://threat_admin:secure_password_123@db:5432/insider_threat_db
+      SECRET_KEY: your-secret-key-here-change-in-production
+      MODEL_PATH: /app/models
+      CORS_ORIGINS: http://localhost:3000,http://frontend:3000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./models:/app/models
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - threat_network
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Frontend React Application
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: threat_detection_frontend
+    environment:
+      REACT_APP_API_URL: http://localhost:8000
+      NODE_ENV: production
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - threat_network
+
+  # Redis for Caching (Optional but recommended)
+  redis:
+    image: redis:7-alpine
+    container_name: threat_detection_cache
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - threat_network
+    command: redis-server --appendonly yes
+
+  # ML Model Training Service (Background)
+  ml_trainer:
+    build:
+      context: ./ml_pipeline
+      dockerfile: Dockerfile
+    container_name: threat_detection_trainer
+    environment:
+      DATABASE_URL: postgresql://threat_admin:secure_password_123@db:5432/insider_threat_db
+      MODEL_OUTPUT_PATH: /models
+    volumes:
+      - ./models:/models
+      - ./ml_pipeline:/app
+    depends_on:
+      - db
+    networks:
+      - threat_network
+    command: python train_scheduler.py
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  threat_network:
+    driver: bridge

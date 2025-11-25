@@ -1,0 +1,40 @@
+# Render ignore file - files/directories to exclude from deployment
+
+# Development files
+*.md
+!README.md
+!RENDER_DEPLOYMENT.md
+.git/
+.gitignore
+
+# Local development files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Documentation (except deployment guide)
+docs/
+
+# Agent directory (not needed for cloud deployment)
+agent/
+
+# Test files
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+test/
+
+# Notebooks
+notebooks/
+
+# Local scripts
+test_alert_flow.sh
+

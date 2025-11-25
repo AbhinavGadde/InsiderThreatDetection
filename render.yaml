@@ -1,0 +1,47 @@
+services:
+  # PostgreSQL Database
+  - type: pspg
+    name: insider-threat-db
+    databaseName: insider_threat_db
+    user: threat_admin
+    plan: starter
+    maxConnections: 25
+
+  # Backend API Service
+  - type: web
+    name: insider-threat-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    plan: starter
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: insider-threat-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: MODEL_PATH
+        value: /app/models
+      - key: CORS_ORIGINS
+        sync: false
+      - key: PORT
+        value: 8000
+    buildCommand: ""
+    startCommand: python startup.py
+
+  # Frontend Web Service
+  - type: web
+    name: insider-threat-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: starter
+    envVars:
+      - key: REACT_APP_API_URL
+        sync: false
+    buildCommand: ""
+    startCommand: ""
+    healthCheckPath: /health
+

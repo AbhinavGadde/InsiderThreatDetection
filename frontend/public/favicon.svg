@@ -1,0 +1,27 @@
+<svg width="32" height="32" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="eyeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Shield Background -->
+  <path d="M 100 20 L 160 40 L 160 100 Q 160 140 100 180 Q 40 140 40 100 L 40 40 Z" 
+        fill="url(#shieldGradient)"/>
+  
+  <!-- Eye Symbol -->
+  <ellipse cx="100" cy="90" rx="35" ry="25" fill="url(#eyeGradient)" opacity="0.9"/>
+  <ellipse cx="100" cy="90" rx="20" ry="20" fill="#0F172A"/>
+  <ellipse cx="100" cy="90" rx="8" ry="8" fill="#FFFFFF"/>
+  <ellipse cx="102" cy="88" rx="3" ry="3" fill="#0F172A"/>
+  
+  <!-- IQ Text -->
+  <text x="100" y="135" font-family="Arial, sans-serif" font-size="24" font-weight="bold" 
+        fill="#FFFFFF" text-anchor="middle">IQ</text>
+</svg>
+

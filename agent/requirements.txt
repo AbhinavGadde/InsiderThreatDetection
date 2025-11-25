@@ -1,0 +1,33 @@
+# Enterprise Real-Time Monitoring Agent Dependencies
+# Install with: pip install -r requirements.txt
+
+# Core dependencies (required for all platforms)
+psutil>=5.9.0           # System and process monitoring
+requests>=2.31.0        # HTTP client for server communication
+urllib3>=2.0.0          # HTTP library with retry support
+
+# Platform-specific dependencies (OPTIONAL - agent works without them using fallback)
+
+# macOS only (OPTIONAL - requires Xcode to build from source)
+# If you have Xcode installed, uncomment these for native FSEvents support:
+# pyobjc-framework-Cocoa>=10.0      # macOS Cocoa frameworks
+# pyobjc-framework-FSEvents>=10.0   # macOS File System Events
+# 
+# To install macOS dependencies (requires Xcode):
+#   xcode-select --install  # Install Xcode Command Line Tools
+#   # OR install full Xcode from App Store
+#   pip install pyobjc-framework-Cocoa pyobjc-framework-FSEvents
+#
+# Note: Agent will work without these using fallback polling-based monitoring
+
+# Windows only (OPTIONAL)
+# pywin32>=306          # Windows API access (Event Log, File System Watcher)
+# Install with: pip install pywin32 (Windows only)
+
+# Linux only (OPTIONAL)
+# pyinotify>=0.9.6      # Linux inotify file system monitoring
+# Install with: pip install pyinotify (Linux only)
+
+# Optional dependencies (for advanced features)
+# cryptography>=41.0.0  # Encryption (if enabled)
+# keyring>=24.0.0       # Secure credential storage (if enabled)
